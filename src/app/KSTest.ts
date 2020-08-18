@@ -1,6 +1,6 @@
-import calculateFi from "../app/poissonDistribution"
+import calculateFi from "./poissonDistribution"
 
-export default class PoissonTestClass {
+export default class KSTest {
     private arrayObservation: number[]
     private arrayProbFo: number[] = []
     private arrayProbFi: number[] = []
