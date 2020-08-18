@@ -1,4 +1,4 @@
-import poisson from "../app/poissonDistribution"
+import calculateFi from "../app/poissonDistribution"
 
 export default class PoissonTestClass {
     private arrayObservation: number[]
@@ -19,7 +19,7 @@ export default class PoissonTestClass {
         this.arrayObservation.sort()
         this.sortArray(this.arrayFo)
 
-        this.calculateFi()
+        this.arrayFi = calculateFi(this.arrayObservation)
         this.getAcFo()
         this.getAcFi()
 
@@ -33,7 +33,7 @@ export default class PoissonTestClass {
 
         if (Dn < Dtab) {
             console.log("NO SE PUEDE RECHAZAR LA HIPOTESIS HO: LA MUESTRA SE COMPORTA COMO UNA DISTRIBUION POISSON");
-            
+
             //No se puede rechazar la H0
         } else {
             console.log("SE RECHAZA LA HIPOTESIS HO: LA MUESTRA NO SE COMPORTA COMO UNA DISTRIBUION POISSON");
@@ -43,12 +43,6 @@ export default class PoissonTestClass {
 
     private sortArray(arrayToSort: number[]) {
         arrayToSort.sort(function (a, b) { return b - a })
-    }
-
-    private calculateFi() {
-        this.arrayObservation.forEach((num, i) => {
-            this.arrayFi.push(poisson(num, this.media))
-        })
     }
 
     private getAcFo() {

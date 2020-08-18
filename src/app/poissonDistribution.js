@@ -11,7 +11,7 @@ const poisson = (k, landa) => {
     var landaPowerK = Math.pow(landa, k); // Landa elevated k
     numerator = exponentialPower * landaPowerK;
     denominator = fact(k); // factorial of k.
-    
+
     return parseFloat((numerator / denominator).toFixed(4));
 }
 
@@ -24,4 +24,12 @@ function fact(x) {
    return x * fact(x-1);
 }
 
-export default poisson
+const calculateFi = (arrayObservation) => {
+  var arrayFi = []
+  arrayObservation.forEach((num, i) => {
+      arrayFi.push(poisson(num, this.media))
+  })
+  return arrayFi
+}
+
+export default calculateFi
