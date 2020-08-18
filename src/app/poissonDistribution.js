@@ -15,8 +15,6 @@ const poisson = (k, landa) => {
     return parseFloat((numerator / denominator).toFixed(4));
 }
 
-console.log("Total sum is " + total);
-
 function fact(x) {
    if(x==0) {
       return 1;
@@ -24,10 +22,10 @@ function fact(x) {
    return x * fact(x-1);
 }
 
-const calculateFi = (arrayObservation) => {
+const calculateFi = (arrayObservation, media) => {
   var arrayFi = []
   arrayObservation.forEach((num, i) => {
-      arrayFi.push(poisson(num, this.media))
+      arrayFi.push(poisson(num, media))
   })
   return arrayFi
 }

@@ -2,35 +2,29 @@ import calculateFi from "../app/poissonDistribution"
 
 export default class PoissonTestClass {
     private arrayObservation: number[]
-    private arrayFo: number[]//
-    private arrayFi: number[] = []
-    private arrayAcumFo: number[] = []
-    private arrayAcumFi: number[] = []
-    private media: number = 0.8083
+    private arrayProbFo: number[] = []
+    private arrayProbFi: number[] = []
+    private arrayAcumProbFo: number[] = []
+    private arrayAcumProbFi: number[] = []
     private observationSize: number
 
 
     runTest = (arrayObservation: number[], arrayFo: number[], media: number, sampleSize: number) => {
         this.arrayObservation = arrayObservation
-        this.arrayFo = arrayFo
-        this.media = media
         this.observationSize = sampleSize
-
+        this.arrayProbFo = this.getArrayProbFo(arrayFo)
         this.arrayObservation.sort()
-        this.sortArray(this.arrayFo)
+        this.sortArray(this.arrayProbFo)
 
-        this.arrayFi = calculateFi(this.arrayObservation)
+        this.arrayProbFi = calculateFi(this.arrayObservation, media)
         this.getAcFo()
         this.getAcFi()
 
+
         let Dn = this.calculateDn()
-
         let Dtab = this.calculateDtab()
-
         console.log("Dn: " + Dn);
         console.log("D tab: " + Dtab);
-
-
         if (Dn < Dtab) {
             console.log("NO SE PUEDE RECHAZAR LA HIPOTESIS HO: LA MUESTRA SE COMPORTA COMO UNA DISTRIBUION POISSON");
 
@@ -41,28 +35,42 @@ export default class PoissonTestClass {
         }
     }
 
+    private getArrayProbFo(arrayFo: number[]): number[] {
+        let arrayProbFo: number[] = []
+        console.log(arrayFo);
+
+        arrayFo.forEach(fo => {
+            let probFo = fo / this.observationSize
+            probFo = parseFloat(probFo.toFixed(4))
+            arrayProbFo.push(probFo)
+        });
+        console.log(arrayProbFo);
+        
+        return arrayProbFo
+    }
+
     private sortArray(arrayToSort: number[]) {
         arrayToSort.sort(function (a, b) { return b - a })
     }
 
     private getAcFo() {
         let acumAux: number = 0
-        this.arrayFo.forEach(num => {
+        this.arrayProbFo.forEach(num => {
             acumAux += num
             acumAux = parseFloat(acumAux.toFixed(4))
-            this.arrayAcumFo.push(acumAux)
+            this.arrayAcumProbFo.push(acumAux)
         })
     }
 
 
     private getAcFi() {
         let acumAux: number = 0
-        this.arrayFi.forEach(num => {
+        this.arrayProbFi.forEach(num => {
             acumAux += num
             acumAux = parseFloat(acumAux.toFixed(4))
-            this.arrayAcumFi.push(acumAux)
+            this.arrayAcumProbFi.push(acumAux)
         })
-        return this.arrayAcumFi
+        return this.arrayAcumProbFi
     }
 
     private calculateDn(): number {
@@ -73,8 +81,8 @@ export default class PoissonTestClass {
     private getArrayAcumDiff(): number[] {
         let arrayAcumDiff: number[] = []
 
-        this.arrayAcumFo.forEach((probFo, i) => {
-            let probFi = this.arrayAcumFi[i]
+        this.arrayAcumProbFo.forEach((probFo, i) => {
+            let probFi = this.arrayAcumProbFi[i]
             let diff = Math.abs(probFo - probFi)
             diff = parseFloat(diff.toFixed(4))
             arrayAcumDiff.push(diff)

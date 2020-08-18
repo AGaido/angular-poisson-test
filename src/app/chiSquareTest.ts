@@ -7,21 +7,16 @@ export default class ChiSquareTest {
     private observationSize: number
 
 
-    runTest = (arrayObservation: number[], arrayFo: number[], sampleSize: number) => {
+    runTest = (arrayObservation: number[], arrayFo: number[], media: number, sampleSize: number) => {
         this.arrayObservation = arrayObservation
         this.arrayFo = arrayFo
         this.observationSize = sampleSize
+        this.arrayFi = calculateFi(this.arrayObservation, media).map((num) => { return Number((num * this.observationSize).toFixed(4)) })
 
-        this.arrayFi = calculateFi(this.arrayObservation).map((num) => {return num*this.observationSize})
 
         let chiValue = this.calculateChi()
 
         let chiTab = this.calculateChitab()
-
-        console.log("chi: " + chiValue);
-        console.log("chi tab: " + chiTab);
-
-
         if (chiValue < chiTab) {
             console.log("NO SE PUEDE RECHAZAR LA HIPOTESIS HO: LA MUESTRA SE COMPORTA COMO UNA DISTRIBUION POISSON");
 
@@ -33,10 +28,10 @@ export default class ChiSquareTest {
     }
 
     private calculateChi(): number {
-        let chiAcum: number
+        let chiAcum: number =0
         this.arrayFi.forEach((fe, i) => {
             let fo = this.arrayFo[i]
-            let diff = Math.pow((fe - fo), 2)
+            let diff = Math.pow((fo - fe), 2)
             let division = diff / fe
             chiAcum += division
             chiAcum = parseFloat(chiAcum.toFixed(4))
@@ -46,7 +41,7 @@ export default class ChiSquareTest {
     }
 
     private calculateChitab(): number {
-        let v = (this.arrayFo.length-1)// Se resdta uno porqe se calculo la media
+        let v = (this.arrayFo.length - 1) - 1// Se resdta uno porqe se calculo la media
         return this.getChiTab(v)
     }
 
